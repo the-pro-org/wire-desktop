@@ -19,7 +19,7 @@
 
 // Modules
 const {app, BrowserWindow, ipcMain, Menu, shell} = require('electron');
-const fs = require('fs');
+const fs = require('fs-extra');
 const minimist = require('minimist');
 const path = require('path');
 const raygun = require('raygun');
