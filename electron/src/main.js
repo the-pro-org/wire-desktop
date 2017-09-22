@@ -209,7 +209,7 @@ const showMainWindow = () => {
     show: false,
     webPreferences: {
       backgroundThrottling: false,
-      nodeIntegration: false,
+      nodeIntegration: true,
       preload: PRELOAD_JS,
       webviewTag: true,
     },
