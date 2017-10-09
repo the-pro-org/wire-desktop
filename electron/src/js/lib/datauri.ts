@@ -17,11 +17,6 @@
  *
  */
 
+const fromBuffer = (mimetype: string, buffer: Buffer) => `data:${mimetype};base64,${Buffer.from(buffer).toString('base64')}`;
 
-
-module.exports = {
-  fromBuffer: function (mimetype, buffer) {
-    let bufferBase64encoded = Buffer.from(buffer).toString('base64');
-    return 'data:' + mimetype + ';base64,' + bufferBase64encoded;
-  },
-};
+export { fromBuffer };

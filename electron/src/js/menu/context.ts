@@ -17,9 +17,8 @@
  *
  */
 
+import { clipboard, remote, ipcRenderer, webFrame } from 'electron';
 
-
-const {clipboard, remote, ipcRenderer, webFrame} = require('electron');
 const Menu = remote.Menu;
 const webContents = remote.getCurrentWebContents();
 const config = require('./../config');

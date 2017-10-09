@@ -18,8 +18,8 @@
  */
 
 
+import { MenuItem } from 'electron';
 
-const {MenuItem} = require('electron');
 const config = require('./../config');
 const settings = require('./../lib/settings');
 const env = settings.restore('env', config.INTERNAL);
@@ -154,4 +154,4 @@ let menuTemplate = {
   ],
 };
 
-module.exports = new MenuItem(menuTemplate);
+export default new MenuItem(menuTemplate);

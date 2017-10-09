@@ -17,9 +17,8 @@
  *
  */
 
+import { app, shell, dialog, Menu } from 'electron';
 
-
-const {app, shell, dialog, Menu} = require('electron');
 const autoLaunch = require('auto-launch');
 const launchCmd = (process.env.APPIMAGE != null) ? process.env.APPIMAGE : process.execPath;
 
@@ -466,8 +465,7 @@ function changeLocale(language) {
   });
 }
 
-
-module.exports = {
+export default {
   createMenu: function() {
     if (process.platform === 'darwin') {
       menuTemplate.unshift(darwinTemplate);

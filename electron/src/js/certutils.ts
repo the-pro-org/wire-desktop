@@ -17,10 +17,8 @@
  *
  */
 
-
-
-const crypto = require('crypto');
-const rs = require('jsrsasign');
+import * as crypto from 'crypto';
+import { rs } from 'jsrsasign';
 
 const MAIN_FP = '3pHQns2wdYtN4b2MWsMguGw70gISyhBZLZDpbj+EmdU=';
 const ALGORITHM_RSA = '2a864886f70d010101';
@@ -81,7 +79,7 @@ const pins = [
   },
 ];
 
-module.exports = {
+export default {
   hostnameShouldBePinned (hostname) {
     return pins.some((pin) => pin.url.test(hostname.toLowerCase().trim()));
   },
@@ -100,7 +98,10 @@ module.exports = {
       return {decoding: false};
     }
 
-    const result = {};
+    const result: {
+      verifiedIssuerRootPubkeys,
+      verifiedPublicKeyInfo
+    } = {};
 
     for (const pin of pins) {
       const {url, publicKeyInfo = [], issuerRootPubkeys = []} = pin;

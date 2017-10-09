@@ -17,12 +17,12 @@
  *
  */
 
-'use strict';
+import * as fs from 'fs';
+import * as path from 'path';
+import { app as ElectronApp, remote } from 'electron';
 
-const fs = require('fs');
-const path = require('path');
+const app = ElectronApp || remote.app;
 
-const app = require('electron').app || require('electron').remote.app;
 const debug = require('debug');
 
 const INIT_JSON = path.join(app.getPath('userData'), 'init.json');

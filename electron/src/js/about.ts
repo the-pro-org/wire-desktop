@@ -17,11 +17,11 @@
  *
  */
 
-
-
-const {remote, ipcRenderer, shell} = require('electron');
+import { remote, ipcRenderer, shell } from 'electron';
 
 const pkg = require('./../package.json');
+
+
 const locale = require('./../locale/locale');
 
 let labels = document.getElementsByClassName('text');

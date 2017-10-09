@@ -17,8 +17,6 @@
  *
  */
 
-
-
-module.exports = function (obj = []) {
-  return Array.isArray(obj) ? obj : [obj];
+export default (obj: Array<string>|string) => {
+  return (Array.isArray(obj) ? obj : [obj]);
 };

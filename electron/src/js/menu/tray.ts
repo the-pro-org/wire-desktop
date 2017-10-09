@@ -17,9 +17,7 @@
  *
  */
 
-
-
-const {app, Menu, Tray} = require('electron');
+import { app, Menu, Tray } from 'electron';
 
 const path = require('path');
 const config = require('./../config');
@@ -33,11 +31,11 @@ const iconBadgePath = path.join(app.getAppPath(), 'img', ('tray.badge.' + iconEx
 const iconOverlayPath = path.join(app.getAppPath(), 'img', 'taskbar.overlay.png');
 
 let lastUnreadCount = 0;
-
 let appIcon = null;
 
-module.exports = {
-  createTrayIcon: function() {
+export default {
+  createTrayIcon: () => {
+
     if (process.platform === 'darwin') {
       return;
     }
@@ -46,21 +44,21 @@ module.exports = {
     let contextMenu = Menu.buildFromTemplate([
       {
         label: locale.getText('trayOpen'),
-        click: function() {windowManager.showPrimaryWindow();},
+        click: () => {windowManager.showPrimaryWindow();},
       }, {
         label: locale.getText('trayQuit'),
-        click: function() {app.quit();},
+        click: () => {app.quit();},
       },
     ]);
 
     appIcon.setToolTip(config.NAME);
     appIcon.setContextMenu(contextMenu);
-    appIcon.on('click', function() {
+    appIcon.on('click', () => {
       windowManager.showPrimaryWindow();
     });
   },
 
-  updateBadgeIcon: function(win, count) {
+  updateBadgeIcon: (win, count) => {
     if (count) {
       this.useBadgeIcon();
     } else {
@@ -72,12 +70,12 @@ module.exports = {
     lastUnreadCount = count;
   },
 
-  useDefaultIcon: function() {
+  useDefaultIcon: () => {
     if (appIcon == null) return;
     appIcon.setImage(iconPath);
   },
 
-  useBadgeIcon: function() {
+  useBadgeIcon: () => {
     if (appIcon == null) return;
     appIcon.setImage(iconBadgePath);
   },

@@ -17,33 +17,40 @@
  *
  */
 
+ // Movie to axios
 
+import * as request from 'request';
 
-const request = require('request');
-
-const arrayify = require('./arrayify');
-const datauri = require('./datauri');
+import * as arrayify from './arrayify';
+import {fromBuffer} from './datauri';
 
 function fetch(url, callback) {
-  request({ url: url, encoding: null }, function(error, response, body) {
+  request({ url: url, encoding: null }, (error, response, body) => {
     if (error) return callback(error);
     let mimetype = response.headers['content-type'];
-    callback(null, datauri.fromBuffer(mimetype, body));
+    callback(null, fromBuffer(mimetype, body));
   });
 }
 
-module.exports = function(urls, limit = 1, callback) {
-  let imagesToFetch = arrayify(urls).slice(0, limit);
-  let completedRequests = 0;
-  let images = [];
+export default function(urls: Array<string>|string, limit: number = 1, callback: Function) {
+  let imagesToFetch: Array<string> = arrayify(urls).slice(0, limit);
+  let completedRequests: number = 0;
+  let images: Array<string> = [];
 
-  if (imagesToFetch.length === 0) return callback();
+  if (imagesToFetch.length === 0) {
+    return callback();
+  }
 
-  imagesToFetch.forEach(function(url) {
-    fetch(url, function(err, dataURI) {
+  imagesToFetch.forEach((url) => {
+    fetch(url, (err, dataURI) => {
       completedRequests++;
-      if (err) console.log('unable to fetch image ');
-      if (dataURI) images.push(dataURI);
+
+      if (dataURI) {
+        images.push(dataURI);
+      } else if (err) {
+        console.log('Unable to fetch image');
+      }
+
       if (completedRequests === imagesToFetch.length) {
         callback(images.length > 1 ? images : images[0]);
       }

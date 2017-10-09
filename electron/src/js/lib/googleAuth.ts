@@ -18,8 +18,7 @@
  */
 
 
-
-const {BrowserWindow} = require('electron');
+import { BrowserWindow } from 'electron';
 
 const qs = require('querystring');
 const google = require('googleapis');

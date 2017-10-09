@@ -17,16 +17,13 @@
  *
  */
 
+import * as fs from 'fs';
+import { dialog } from 'electron';
+import * as imageType from 'image-type';
 
-
-const fs = require('fs');
-const imageType = require('image-type');
-
-const {dialog} = require('electron');
-
-module.exports = function(fileName, bytes) {
-  return new Promise(function (resolve, reject) {
-    let options = {};
+export default function(fileName: string, bytes: Uint8Array) {
+  return new Promise((resolve, reject) => {
+    let options: Electron.SaveDialogOptions = {};
     let type = imageType(bytes);
 
     if (fileName) {
@@ -39,18 +36,16 @@ module.exports = function(fileName, bytes) {
       ];
     }
 
-    dialog.showSaveDialog(options, function (chosenPath) {
-      if (chosenPath !== undefined) {
-        fs.writeFile(chosenPath, new Buffer(bytes.buffer), function(error) {
-          if (error) {
-            reject(error);
-          } else {
-            resolve();
-          }
-        });
-      } else {
-        reject('no path specified');
+    dialog.showSaveDialog(options, (chosenPath: string) => {
+      if (chosenPath === undefined) {
+        return reject('No path specified');
       }
+      fs.writeFile(chosenPath, new Buffer(bytes.buffer), (error: Error) => {
+        if (error) {
+          return reject(error);
+        }
+        return resolve();
+      });
     });
   });
 };
