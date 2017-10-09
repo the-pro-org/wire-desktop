@@ -2,7 +2,7 @@
   "name": "wireinternal",
   "productName": "WireInternal",
   "description": "Modern communication, full privacy.",
-  "main": "main.js",
+  "main": "./dist/commonjs/main.js",
   "updateWinUrl": "https://wire-app.wire.com/win/internal/",
   "environment": "internal",
   "homepage": "https://wire.com",
@@ -31,7 +31,7 @@
     "redux-logger": "3.0.6",
     "redux-thunk": "2.2.0",
     "request": "2.76.0",
-    "rimraf": "2.6.1",
+    "rimraf": "2.6.2",
     "spellchecker": "3.3.1",
     "uuid": "3.1.0",
     "winston": "https://github.com/wireapp/winston.git#2.2.0-e"
@@ -47,6 +47,17 @@
   },
   "scripts": {
     "rebuild-native-modules": "node ./rebuild-native-modules.js \"electron-rebuild\" \"-f -m ./\"",
-    "rebuild-neon": "node ./rebuild-native-modules.js \"electron-build-env\" \"neon build libsodium-neon\""
-  }
+    "rebuild-neon": "node ./rebuild-native-modules.js \"electron-build-env\" \"neon build libsodium-neon\"",
+    "clear": "rimraf dist",
+    "dist": "yarn clear && tsc",
+    "lint": "prettier --single-quote --trailing-comma all --no-bracket-spacing --print-width 120 --write \"src/**/*.ts\"",
+    "postversion": "git push && git push --tags",
+    "precommit": "lint-staged",
+    "preversion": "yarn && yarn dist && yarn test",
+    "test:browser": "true",
+    "test:node": "cross-env JASMINE_CONFIG_PATH=src/test/node/support/jasmine.json jasmine",
+    "test": "yarn lint && yarn dist && yarn test:node && yarn test:browser",
+    "version": "yarn dist"
+  },
+  "types": "./dist/commonjs/main.d.ts"
 }
