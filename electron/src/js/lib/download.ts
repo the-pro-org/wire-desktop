@@ -32,20 +32,21 @@ export default function(fileName: string, bytes: Uint8Array) {
 
     if (type && type.ext) {
       options.filters = [
-        {name: 'Images', extensions: [type.ext]},
+        {
+          name: 'Images',
+          extensions: [
+            type.ext,
+          ],
+        },
       ];
     }
 
     dialog.showSaveDialog(options, (chosenPath: string) => {
-      if (chosenPath === undefined) {
-        return reject('No path specified');
+      if (chosenPath !== undefined) {
+        fs.writeFile(chosenPath, new Buffer(bytes.buffer), (error) => error ? reject(error) : resolve());
+      } else {
+        reject('No path specified');
       }
-      fs.writeFile(chosenPath, new Buffer(bytes.buffer), (error: Error) => {
-        if (error) {
-          return reject(error);
-        }
-        return resolve();
-      });
     });
   });
 };

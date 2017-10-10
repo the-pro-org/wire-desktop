@@ -17,17 +17,15 @@
  *
  */
 
-
-
-
 export default function(point: Array<number>, rectangle: {
   x: number,
   y: number,
   width: number,
   height: number,
 }) {
-  return (point[0] >= rectangle.x &&
-    point[0] <= rectangle.x + rectangle.width &&
-    point[1] >= rectangle.y &&
-    point[1] <= rectangle.y + rectangle.height);
+  const [x, y] = point;
+  const x_in_range = x >= rectangle.x && x <= rectangle.x + rectangle.width;
+  const y_in_range = y >= rectangle.y && y <= rectangle.y + rectangle.height;
+
+  return x_in_range && y_in_range;
 };

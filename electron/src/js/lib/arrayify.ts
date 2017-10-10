@@ -17,6 +17,4 @@
  *
  */
 
-export default (obj: Array<string>|string) => {
-  return (Array.isArray(obj) ? obj : [obj]);
-};
+export default (obj: Array<string>|string) => Array.isArray(obj) ? obj : [obj];

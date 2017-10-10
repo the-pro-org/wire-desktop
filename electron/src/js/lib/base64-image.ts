@@ -17,38 +17,42 @@
  *
  */
 
- // Movie to axios
+// Move to axios?
 
 import * as request from 'request';
-
 import * as arrayify from './arrayify';
 import {fromBuffer} from './datauri';
 
-function fetch(url, callback) {
+const fetch = (url, callback) => {
   request({ url: url, encoding: null }, (error, response, body) => {
-    if (error) return callback(error);
-    let mimetype = response.headers['content-type'];
-    callback(null, fromBuffer(mimetype, body));
+    if (error) {
+      return callback(error);
+    }
+
+    const mimeType = response.headers['content-type'];
+    callback(null, datauri.fromBuffer(mimeType, body));
   });
-}
+};
 
 export default function(urls: Array<string>|string, limit: number = 1, callback: Function) {
   let imagesToFetch: Array<string> = arrayify(urls).slice(0, limit);
   let completedRequests: number = 0;
   let images: Array<string> = [];
 
-  if (imagesToFetch.length === 0) {
+  if (!imagesToFetch.length) {
     return callback();
   }
 
   imagesToFetch.forEach((url) => {
-    fetch(url, (err, dataURI) => {
+    fetch(url, (error, dataURI) => {
       completedRequests++;
+
+      if (error) {
+        console.log('Unable to fetch image');
+      }
 
       if (dataURI) {
         images.push(dataURI);
-      } else if (err) {
-        console.log('Unable to fetch image');
       }
 
       if (completedRequests === imagesToFetch.length) {
