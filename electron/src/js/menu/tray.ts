@@ -21,10 +21,11 @@ import { app, Menu, Tray } from 'electron';
 
 const path = require('path');
 const config = require('./../config');
+const environment = require('./../environment');
 const locale = require('./../../locale/locale');
 const windowManager = require('./../window-manager');
 
-const iconExt = (process.platform === 'win32') ? 'ico' : 'png';
+const iconExt = (environment.platform.IS_WINDOWS) ? 'ico' : 'png';
 
 const iconPath = path.join(app.getAppPath(), 'img', ('tray.' + iconExt));
 const iconBadgePath = path.join(app.getAppPath(), 'img', ('tray.badge.' + iconExt));
@@ -33,50 +34,54 @@ const iconOverlayPath = path.join(app.getAppPath(), 'img', 'taskbar.overlay.png'
 let lastUnreadCount = 0;
 let appIcon = null;
 
-export default {
-  createTrayIcon: () => {
-
-    if (process.platform === 'darwin') {
-      return;
-    }
-
+const _createTrayIcon = () => {
+  if (!environment.platform.IS_MAC_OS) {
     appIcon = new Tray(iconPath);
-    let contextMenu = Menu.buildFromTemplate([
+    const contextMenu = Menu.buildFromTemplate([
       {
         label: locale.getText('trayOpen'),
-        click: () => {windowManager.showPrimaryWindow();},
+        click: () => windowManager.showPrimaryWindow(),
       }, {
         label: locale.getText('trayQuit'),
-        click: () => {app.quit();},
+        click: () => app.quit(),
       },
     ]);
 
     appIcon.setToolTip(config.NAME);
     appIcon.setContextMenu(contextMenu);
-    appIcon.on('click', () => {
-      windowManager.showPrimaryWindow();
-    });
-  },
+    appIcon.on('click', () => windowManager.showPrimaryWindow());
+  }
+};
 
-  updateBadgeIcon: (win, count) => {
-    if (count) {
-      this.useBadgeIcon();
-    } else {
-      this.useDefaultIcon();
-    }
-    win.setOverlayIcon(count && process.platform === 'win32' ? iconOverlayPath : null, locale.getText('unreadMessages'));
-    win.flashFrame(!win.isFocused() && count > lastUnreadCount);
-    app.setBadgeCount(count);
-    lastUnreadCount = count;
-  },
+const _updateBadgeIcon = (win, count) => {
+  if (count) {
+    _useBadgeIcon();
+  } else {
+    _useDefaultIcon();
+  }
 
-  useDefaultIcon: () => {
-    if (appIcon == null) return;
+  if (environment.platform.IS_WINDOWS) {
+    win.setOverlayIcon(count ? iconOverlayPath : null, locale.getText('unreadMessages'));
+  }
+
+  win.flashFrame(!win.isFocused() && count > lastUnreadCount);
+  app.setBadgeCount(count);
+  lastUnreadCount = count;
+};
+
+const _useDefaultIcon = () => {
+  if (appIcon) {
     appIcon.setImage(iconPath);
-  },
+  }
+};
 
-  useBadgeIcon: () => {
-    if (appIcon == null) return;
+const _useBadgeIcon = () => {
+  if (appIcon) {
     appIcon.setImage(iconBadgePath);
-  },
+  }
+};
+
+module.exports = {
+  createTrayIcon: _createTrayIcon,
+  updateBadgeIcon: _updateBadgeIcon,
 };
