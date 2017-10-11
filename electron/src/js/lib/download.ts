@@ -33,10 +33,10 @@ export default function(fileName: string, bytes: Uint8Array) {
     if (type && type.ext) {
       options.filters = [
         {
-          name: 'Images',
           extensions: [
             type.ext,
           ],
+          name: 'Images',
         },
       ];
     }

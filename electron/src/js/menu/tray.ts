@@ -39,11 +39,11 @@ const _createTrayIcon = () => {
     appIcon = new Tray(iconPath);
     const contextMenu = Menu.buildFromTemplate([
       {
-        label: locale.getText('trayOpen'),
         click: () => windowManager.showPrimaryWindow(),
+        label: locale.getText('trayOpen'),
       }, {
-        label: locale.getText('trayQuit'),
         click: () => app.quit(),
+        label: locale.getText('trayQuit'),
       },
     ]);
 
