@@ -17,44 +17,48 @@
  *
  */
 
-
-
 const pkg = require('./../package.json');
 
-let config = {
-  WIRE: 'https://wire.com',
-  WIRE_SUPPORT: 'https://support.wire.com',
-  WIRE_LEGAL: 'https://wire.com/legal/',
-  WIRE_PRIVACY: 'https://wire.com/privacy/',
-  WIRE_LICENSES: 'https://wire.com/legal/licenses/',
+export class Config {
 
-  DEV_URL: 'https://wire-webapp-dev.zinfra.io/',
-  EDGE_URL: 'https://wire-webapp-edge.zinfra.io/',
-  INTERNAL_URL: 'https://wire-webapp-staging.wire.com/?env=prod',
-  LOCALHOST_URL: 'http://localhost:8888/',
-  PROD_URL: 'https://app.wire.com/',
-  STAGING_URL: 'https://wire-webapp-staging.zinfra.io/',
+  public static readonly WIRE = 'https://wire.com';
 
-  DEV: 'dev',
-  EDGE: 'edge',
-  INTERNAL: 'internal',
-  LOCALHOST: 'localhost',
-  PROD: 'prod',
-  STAGING: 'staging',
+  public static readonly WIRE_SUPPORT = 'https://support.wire.com';
+  public static readonly WIRE_LEGAL = 'https://wire.com/legal/';
+  public static readonly WIRE_PRIVACY = 'https://wire.com/privacy/';
+  public static readonly WIRE_LICENSES = 'https://wire.com/legal/licenses/';
 
-  MIN_WIDTH_MAIN: 760,
-  MIN_HEIGHT_MAIN: 512,
+  public static readonly DEV_URL = 'https://wire-webapp-dev.zinfra.io/';
+  public static readonly EDGE_URL = 'https://wire-webapp-edge.zinfra.io/';
+  public static readonly INTERNAL_URL = 'https://wire-webapp-staging.wire.com/?env=prod';
+  public static readonly LOCALHOST_URL = 'http://localhost:8888/';
+  public static readonly PROD_URL = 'https://app.wire.com/';
+  public static readonly STAGING_URL = 'https://wire-webapp-staging.zinfra.io/';
 
-  DEFAULT_WIDTH_MAIN: 1024,
-  DEFAULT_HEIGHT_MAIN: 768,
+  public static readonly DEV = 'dev';
+  public static readonly EDGE = 'edge';
+  public static readonly INTERNAL = 'internal';
+  public static readonly LOCALHOST = 'localhost';
+  public static readonly PROD = 'prod';
+  public static readonly STAGING = 'staging';
 
-  WIDTH_AUTH: 400,
-  HEIGHT_AUTH: 576,
+  public static readonly MIN_WIDTH_MAIN = 760;
+  public static readonly MIN_HEIGHT_MAIN = 512;
 
-  UPDATE_DELAY: 5 * 60 * 1000,
-  UPDATE_INTERVAL: 24 * 60 * 60 * 1000,
+  public static readonly DEFAULT_WIDTH_MAIN = 1024;
+  public static readonly DEFAULT_HEIGHT_MAIN = 768;
 
-  EMBED_DOMAINS: [
+  public static readonly WIDTH_AUTH = 400;
+  public static readonly HEIGHT_AUTH = 576;
+
+  public static readonly UPDATE_DELAY = 300000; // 5 * 60 * 1000
+  public static readonly UPDATE_INTERVAL = 86400000; // 24 * 60 * 60 * 1000
+
+  public static readonly EMBED_DOMAINS: Array<{
+    name: string,
+    hostname: Array<string>,
+    allowedExternalLinks: Array<string>
+  }> = [
     {
       name: 'YouTube',
       hostname: ['www.youtube-nocookie.com'],
@@ -85,9 +89,9 @@ let config = {
         'developer.spotify.com',
       ],
     },
-  ],
+  ];
 
-  LOCALE: [
+  public static readonly LOCALE: Array<string> = [
     'en',
     'cs',
     'da',
@@ -109,27 +113,25 @@ let config = {
     'sl',
     'tr',
     'uk',
-  ],
+  ];
 
-  RAYGUN_API_KEY: '',
+  public static readonly RAYGUN_API_KEY = '';
 
-  GOOGLE_SCOPES: 'https://www.googleapis.com/auth/contacts.readonly',
-  GOOGLE_CLIENT_ID: '',
-  GOOGLE_CLIENT_SECRET: '',
+  public static readonly GOOGLE_SCOPES = 'https://www.googleapis.com/auth/contacts.readonly';
+  public static readonly GOOGLE_CLIENT_ID = '';
+  public static readonly GOOGLE_CLIENT_SECRET = '';
 
-  CONSOLE_LOG: 'console.log',
+  public static readonly CONSOLE_LOG = 'console.log';
 
-  SPELL_SUGGESTIONS: 4,
-  SPELL_SUPPORTED: [
+  public static readonly SPELL_SUGGESTIONS = 4;
+  public static readonly SPELL_SUPPORTED: Array<string> = [
     'en',
-  ],
+  ];
+
+  private static readonly ENVIRONMENT: string = pkg.environment;
+  public static readonly PRODUCTION: boolean = Config.ENVIRONMENT === 'production';
+  public static readonly DEVELOPMENT: boolean = !Config.PRODUCTION;
+  public static readonly UPDATE_WIN_URL: string = pkg.updateWinUrl;
+  public static readonly VERSION: string = pkg.version;
+  public static readonly NAME: string = pkg.productName;
 };
-
-config.ENVIRONMENT = pkg.environment;
-config.PRODUCTION = config.ENVIRONMENT === 'production';
-config.DEVELOPMENT = !config.PRODUCTION;
-config.UPDATE_WIN_URL = pkg.updateWinUrl;
-config.VERSION = pkg.version;
-config.NAME = pkg.productName;
-
-module.exports = config;
